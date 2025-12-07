@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notlarım - NoteMaster</title>
+    <link href="templatemo-3d-coverflow.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 100px 20px 20px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .page-header h1 {
+            color: #333;
+            font-size: 2em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #667eea;
+        }
+        
+        .filter-tab:hover, .filter-tab.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .stats-bar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stats-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .stat-item {
+            position: relative;
+        }
+        
+        .stat-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .stat-label-text {
+            font-size: 0.95em;
+        }
+        
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .bar-container {
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: width 1s ease-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .bar-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .bar-fill.gunluk { background: linear-gradient(90deg, #ff6b6b, #ee5a6f); }
+        .bar-fill.proje { background: linear-gradient(90deg, #4ecdc4, #44a3a0); }
+        .bar-fill.toplanti { background: linear-gradient(90deg, #95e1d3, #7eccc1); }
+        .bar-fill.ders { background: linear-gradient(90deg, #f38181, #e06c6c); }
+        .bar-fill.yaratici { background: linear-gradient(90deg, #aa96da, #9880c4); }
+        .bar-fill.seyahat { background: linear-gradient(90deg, #fcbad3, #f9a3c2); }
+        .bar-fill.tarif { background: linear-gradient(90deg, #ffd93d, #f5c524); }
+        .bar-fill.yabanci { background: linear-gradient(90deg, #a8d8ea, #8fc5db); }
+        
+        .total-stats {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .total-label {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .total-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .note-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .note-type {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .note-type.gunluk { background: #ff6b6b; }
+        .note-type.proje { background: #4ecdc4; }
+        .note-type.toplanti { background: #95e1d3; }
+        .note-type.ders { background: #f38181; }
+        .note-type.yaratici { background: #aa96da; }
+        .note-type.seyahat { background: #fcbad3; }
+        .note-type.tarif { background: #ffffd2; color: #333; }
+        .note-type.yabanci { background: #a8d8ea; }
+        
+        .note-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            padding-right: 100px;
+        }
+        
+        .note-date {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .note-preview {
+            color: #666;
+            line-height: 1.6;
+            max-height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 15px;
+        }
+        
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view {
+            background: #667eea;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Modal Stilleri */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.8em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 28px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 300;
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .modal-type-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .modal-date {
+            color: #999;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .modal-content-text {
+            color: #333;
+            line-height: 1.8;
+            font-size: 1.05em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .modal-footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn-edit {
+            background: #667eea;
+            color: white;
+        }
+        
+        .modal-btn-edit:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .modal-btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .modal-btn-delete:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .empty-state h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .search-box {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-box input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 1em;
+            color: #333;
+        }
+        
+        .search-box input::placeholder {
+            color: #999;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-bar {
+                padding: 15px;
+            }
+            
+            .chart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .total-number {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Ana Sayfaya Dön</button>
+    
+    <div class="container">
+        <div class="page-header">
+            <h1>📝 Notlarım</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Notlarda ara...">
+                <span>🔍</span>
+            </div>
+        </div>
+        
+        <div class="stats-bar">
+            <h2 class="stats-title">📊 Not İstatistikleri</h2>
+            <div class="chart-container" id="chartContainer"></div>
+            <div class="total-stats">
+                <span class="total-label">Toplam Not Sayısı:</span>
+                <span class="total-number" id="totalNotes">0</span>
+            </div>
+        </div>
+        
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-type="all">Tümü</button>
+            <button class="filter-tab" data-type="gunluk">Günlük Notlar</button>
+            <button class="filter-tab" data-type="proje">Proje Notları</button>
+            <button class="filter-tab" data-type="toplanti">Toplantı Notları</button>
+            <button class="filter-tab" data-type="ders">Ders Notları</button>
+            <button class="filter-tab" data-type="yaratici">Yaratıcı Fikirler</button>
+            <button class="filter-tab" data-type="seyahat">Seyahat Notları</button>
+            <button class="filter-tab" data-type="tarif">Tarif Notları</button>
+            <button class="filter-tab" data-type="yabanci">Yabancı Dil</button>
+        </div>
+        
+        <div class="notes-grid" id="notesGrid"></div>
+    </div>
+    
+    <script>
+        let currentFilter = 'all';
+        let searchQuery = '';
+        
+        const noteTypes = {
+            'daily-notes': { type: 'gunluk', name: 'Günlük Notlar', key: 'daily-notes' },
+            'project-notes': { type: 'proje', name: 'Proje Notları', key: 'project-notes' },
+            'meeting-notes': { type: 'toplanti', name: 'Toplantı Notları', key: 'meeting-notes' },
+            'study-notes': { type: 'ders', name: 'Ders Notları', key: 'study-notes' },
+            'creative-ideas': { type: 'yaratici', name: 'Yaratıcı Fikirler', key: 'creative-ideas' },
+            'travel-notes': { type: 'seyahat', name: 'Seyahat Notları', key: 'travel-notes' },
+            'recipe-notes': { type: 'tarif', name: 'Tarif Notları', key: 'recipe-notes' },
+            'language-notes': { type: 'yabanci', name: 'Yabancı Dil Notları', key: 'language-notes' }
+        };
+        
+        function getAllNotes() {
+            const allNotes = [];
+            
+            // Günlük notlar - her not ayrı key'de tutuluyor
+            for (let key in localStorage) {
+                if (key.startsWith('gunluk-not-')) {
+                    const content = localStorage.getItem(key);
+                    const date = key.replace('gunluk-not-', '');
+                    allNotes.push({
+                        id: date,
+                        type: 'gunluk',
+                        typeName: 'Günlük Notlar',
+                        title: date,
+                        content: content || '',
+                        date: date,
+                        createdAt: date,
+                        storageKey: 'gunluk-not'
+                    });
+                }
+            }
+            
+            // Proje notları
+            const projectNotes = JSON.parse(localStorage.getItem('projects') || '[]');
+            projectNotes.forEach(note => {
+                allNotes.push({
+                    ...note,
+                    type: 'proje',
+                    typeName: 'Proje Notları',
+                    title: note.projectName || 'Başlıksız',
+                    content: note.description || '',
+                    storageKey: 'projects'
+                });
+            });
+            
+            // Toplantı notları
+            const meetingNotes = JSON.parse(localStorage.getItem('meetings') || '[]');
+            meetingNotes.forEach(note => {
+                allNotes.push({
+                    ...note,
+                    type: 'toplanti',
+                    typeName: 'Toplantı Notları',
+                    title: note.title || 'Başlıksız',
+                    content: note.notes || '',
+                    storageKey: 'meetings'
+                });
+            });
+            
+            // Ders notları
+            const studyNotes = JSON.parse(localStorage.getItem('study-notes') || '{}');
+            Object.keys(studyNotes).forEach(subject => {
+                if (Array.isArray(studyNotes[subject])) {
+                    studyNotes[subject].forEach(note => {
+                        allNotes.push({
+                            ...note,
+                            type: 'ders',
+                            typeName: 'Ders Notları',
+                            title: subject,
+                            content: note.content || '',
+                            storageKey: 'study-notes',
+                            subject: subject
+                        });
+                    });
+                }
+            });
+            
+            // Yaratıcı fikirler
+            const creativeIdeas = JSON.parse(localStorage.getItem('creative-ideas') || '[]');
+            creativeIdeas.forEach(note => {
+                allNotes.push({
+                    ...note,
+                    type: 'yaratici',
+                    typeName: 'Yaratıcı Fikirler',
+                    title: note.title || 'Başlıksız',
+                    content: note.description || '',
+                    storageKey: 'creative-ideas'
+                });
+            });
+            
+            // Seyahat notları
+            const travelNotes = JSON.parse(localStorage.getItem('travels') || '[]');
+            travelNotes.forEach(note => {
+                allNotes.push({
+                    ...note,
+                    type: 'seyahat',
+                    typeName: 'Seyahat Notları',
+                    title: note.destination || 'Başlıksız',
+                    content: note.notes || '',
+                    storageKey: 'travels'
+                });
+            });
+            
+            // Tarif notları
+            const recipeNotes = JSON.parse(localStorage.getItem('recipes') || '[]');
+            recipeNotes.forEach(note => {
+                allNotes.push({
+                    ...note,
+                    type: 'tarif',
+                    typeName: 'Tarif Notları',
+                    title: note.name || 'Başlıksız',
+                    content: [
+                        note.ingredients ? 'Malzemeler:\n' + note.ingredients : '',
+                        note.instructions ? 'Yapılışı:\n' + note.instructions : '',
+                        note.notes ? 'Notlar:\n' + note.notes : ''
+                    ].filter(Boolean).join('\n\n'),
+                    storageKey: 'recipes'
+                });
+            });
+            
+            // Yabancı dil notları
+            const languageNotesObj = JSON.parse(localStorage.getItem('language-notes') || '{}');
+            Object.keys(languageNotesObj).forEach(language => {
+                const notes = languageNotesObj[language] || [];
+                notes.forEach(note => {
+                    let title = '';
+                    let content = '';
+                    
+                    if (note.data) {
+                        switch(note.type) {
+                            case 'kelime':
+                                title = note.data.foreign || 'Kelime';
+                                content = `Türkçe: ${note.data.turkish || ''}`;
+                                if (note.data.example) {
+                                    content += `\nÖrnek: ${note.data.example}`;
+                                }
+                                break;
+                            case 'cumle':
+                                title = 'Cümle';
+                                content = `Yabancı: ${note.data.foreign || ''}\nTürkçe: ${note.data.turkish || ''}`;
+                                break;
+                            case 'gramer':
+                                title = note.data.topic || 'Gramer';
+                                content = `Kural: ${note.data.rule || ''}`;
+                                if (note.data.example) {
+                                    content += `\nÖrnek: ${note.data.example}`;
+                                }
+                                break;
+                            case 'genel':
+                                title = note.data.title || 'Genel Not';
+                                content = note.data.note || '';
+                                break;
+                            default:
+                                title = 'Yabancı Dil Notu';
+                                content = JSON.stringify(note.data);
+                        }
+                    } else {
+                        // Eski format desteği
+                        title = note.word || note.foreignWord || note.title || 'Başlıksız';
+                        content = note.meaning || note.turkishMeaning || note.note || '';
+                    }
+                    
+                    allNotes.push({
+                        ...note,
+                        type: 'yabanci',
+                        typeName: 'Yabancı Dil Notları',
+                        title: title,
+                        content: content,
+                        storageKey: 'language-notes',
+                        language: language
+                    });
+                });
+            });
+            
+            return allNotes;
+        }
+        
+        function displayNotes() {
+            const allNotes = getAllNotes();
+            const container = document.getElementById('notesGrid');
+            
+            // Filtreleme
+            let filteredNotes = allNotes;
+            if (currentFilter !== 'all') {
+                filteredNotes = allNotes.filter(note => note.type === currentFilter);
+            }
+            
+            // Arama
+            if (searchQuery) {
+                filteredNotes = filteredNotes.filter(note => {
+                    const searchText = (note.title + ' ' + note.content).toLowerCase();
+                    return searchText.includes(searchQuery.toLowerCase());
+                });
+            }
+            
+            // Tarihe göre sıralama (en yeni en üstte)
+            filteredNotes.sort((a, b) => {
+                const dateA = new Date(a.createdAt || a.date || 0);
+                const dateB = new Date(b.createdAt || b.date || 0);
+                return dateB - dateA;
+            });
+            
+            if (filteredNotes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <h2>📭 Henüz Not Yok</h2>
+                        <p>Yeni notlar eklemek için yukarıdaki menüden ilgili not türünü seçin.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredNotes.map(note => {
+                const date = new Date(note.createdAt || note.date || Date.now());
+                const formattedDate = date.toLocaleDateString('tr-TR', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // HTML escape için yardımcı fonksiyon
+                const escapeHtml = (text) => {
+                    if (!text) return '';
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                };
+                
+                const safeTitle = escapeHtml(note.title || 'Başlıksız');
+                const safeContent = escapeHtml(note.content || '');
+                const safeStorageKey = escapeHtml(note.storageKey || '');
+                const safeNoteId = escapeHtml(String(note.id || note.date || ''));
+                const safeSubject = escapeHtml(note.subject || '');
+                
+                return `
+                    <div class="note-card">
+                        <div class="note-type ${note.type}">${note.typeName}</div>
+                        <div class="note-title">${safeTitle}</div>
+                        <div class="note-date">📅 ${formattedDate}</div>
+                        <div class="note-preview">${safeContent.substring(0, 150)}${safeContent.length > 150 ? '...' : ''}</div>
+                        <div class="note-actions">
+                            <button class="btn btn-view" onclick="viewNote('${safeStorageKey}', '${safeNoteId}')">Görüntüle</button>
+                            <button class="btn btn-delete" onclick="deleteNote('${safeStorageKey}', '${safeNoteId}', '${safeSubject}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            updateStats(allNotes);
+        }
+        
+        function updateStats(allNotes) {
+            // Her not tipinin sayısını hesapla
+            const stats = {
+                gunluk: { count: 0, name: 'Günlük Notlar' },
+                proje: { count: 0, name: 'Proje Notları' },
+                toplanti: { count: 0, name: 'Toplantı Notları' },
+                ders: { count: 0, name: 'Ders Notları' },
+                yaratici: { count: 0, name: 'Yaratıcı Fikirler' },
+                seyahat: { count: 0, name: 'Seyahat Notları' },
+                tarif: { count: 0, name: 'Tarif Notları' },
+                yabanci: { count: 0, name: 'Yabancı Dil' }
+            };
+            
+            allNotes.forEach(note => {
+                if (stats[note.type]) {
+                    stats[note.type].count++;
+                }
+            });
+            
+            // En yüksek değeri bul (grafik skalası için)
+            const maxCount = Math.max(...Object.values(stats).map(s => s.count), 1);
+            
+            // Grafik container'ını güncelle
+            const chartContainer = document.getElementById('chartContainer');
+            chartContainer.innerHTML = Object.keys(stats).map(type => {
+                const stat = stats[type];
+                const percentage = (stat.count / maxCount) * 100;
+                
+                return `
+                    <div class="stat-item">
+                        <div class="stat-label">
+                            <span class="stat-label-text">${stat.name}</span>
+                            <span class="stat-number">${stat.count}</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill ${type}" style="width: 0%;" data-width="${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Animasyon ekle
+            setTimeout(() => {
+                document.querySelectorAll('.bar-fill').forEach(bar => {
+                    bar.style.width = bar.getAttribute('data-width');
+                });
+            }, 100);
+            
+            // Toplam not sayısını güncelle
+            document.getElementById('totalNotes').textContent = allNotes.length;
+        }
+        
+        function viewNote(storageKey, noteId) {
+            // Not verilerini bul
+            let note = null;
+            
+            // ID karşılaştırması için yardımcı fonksiyon (hem string hem number için çalışır)
+            const matchId = (id1, id2) => {
+                if (id1 == null || id2 == null) return false;
+                return String(id1) === String(id2) || Number(id1) === Number(id2);
+            };
+            
+            if (storageKey === 'gunluk-not') {
+                const content = localStorage.getItem('gunluk-not-' + noteId);
+                if (content !== null) {
+                    note = {
+                        id: noteId,
+                        type: 'gunluk',
+                        typeName: 'Günlük Notlar',
+                        title: noteId,
+                        content: content || '',
+                        date: noteId,
+                        createdAt: noteId,
+                        storageKey: 'gunluk-not'
+                    };
+                }
+            } else if (storageKey === 'study-notes') {
+                const notes = JSON.parse(localStorage.getItem('study-notes') || '{}');
+                for (let subject in notes) {
+                    const found = notes[subject].find(n => matchId(n.id || n.timestamp, noteId));
+                    if (found) {
+                        note = {
+                            ...found,
+                            type: 'ders',
+                            typeName: 'Ders Notları',
+                            title: subject,
+                            content: found.content || '',
+                            storageKey: 'study-notes',
+                            subject: subject
+                        };
+                        break;
+                    }
+                }
+            } else if (storageKey === 'language-notes') {
+                const languageNotesObj = JSON.parse(localStorage.getItem('language-notes') || '{}');
+                for (let language in languageNotesObj) {
+                    const notes = languageNotesObj[language] || [];
+                    const found = notes.find(n => matchId(n.id || n.timestamp, noteId));
+                    if (found) {
+                        let title = '';
+                        let content = '';
+                        
+                        if (found.data) {
+                            switch(found.type) {
+                                case 'kelime':
+                                    title = found.data.foreign || 'Kelime';
+                                    content = `Türkçe: ${found.data.turkish || ''}`;
+                                    if (found.data.example) {
+                                        content += `\nÖrnek: ${found.data.example}`;
+                                    }
+                                    break;
+                                case 'cumle':
+                                    title = 'Cümle';
+                                    content = `Yabancı: ${found.data.foreign || ''}\nTürkçe: ${found.data.turkish || ''}`;
+                                    break;
+                                case 'gramer':
+                                    title = found.data.topic || 'Gramer';
+                                    content = `Kural: ${found.data.rule || ''}`;
+                                    if (found.data.example) {
+                                        content += `\nÖrnek: ${found.data.example}`;
+                                    }
+                                    break;
+                                case 'genel':
+                                    title = found.data.title || 'Genel Not';
+                                    content = found.data.note || '';
+                                    break;
+                                default:
+                                    title = 'Yabancı Dil Notu';
+                                    content = JSON.stringify(found.data);
+                            }
+                        } else {
+                            title = found.word || found.foreignWord || found.title || 'Başlıksız';
+                            content = found.meaning || found.turkishMeaning || found.note || '';
+                        }
+                        
+                        note = {
+                            ...found,
+                            type: 'yabanci',
+                            typeName: 'Yabancı Dil Notları',
+                            title: title,
+                            content: content,
+                            storageKey: 'language-notes',
+                            language: language
+                        };
+                        break;
+                    }
+                }
+            } else {
+                const notes = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                const found = notes.find(n => {
+                    const noteIdValue = n.id || n.date;
+                    if (noteIdValue == null || noteId == null) return false;
+                    return String(noteIdValue) === String(noteId) || Number(noteIdValue) === Number(noteId);
+                });
+                
+                if (found) {
+                    const typeMap = {
+                        'projects': { type: 'proje', name: 'Proje Notları', titleKey: 'projectName', contentKey: 'description' },
+                        'meetings': { type: 'toplanti', name: 'Toplantı Notları', titleKey: 'title', contentKey: 'notes' },
+                        'creative-ideas': { type: 'yaratici', name: 'Yaratıcı Fikirler', titleKey: 'title', contentKey: 'description' },
+                        'travels': { type: 'seyahat', name: 'Seyahat Notları', titleKey: 'destination', contentKey: 'notes' },
+                        'recipes': { 
+                            type: 'tarif', 
+                            name: 'Tarif Notları', 
+                            titleKey: 'name', 
+                            getContent: (note) => {
+                                return [
+                                    note.ingredients ? 'Malzemeler:\n' + note.ingredients : '',
+                                    note.instructions ? 'Yapılışı:\n' + note.instructions : '',
+                                    note.notes ? 'Notlar:\n' + note.notes : ''
+                                ].filter(Boolean).join('\n\n');
+                            }
+                        },
+                        'language-notes': { 
+                            type: 'yabanci', 
+                            name: 'Yabancı Dil Notları',
+                            getTitle: (note) => {
+                                if (note.data) {
+                                    switch(note.type) {
+                                        case 'kelime': return note.data.foreign || 'Kelime';
+                                        case 'cumle': return 'Cümle';
+                                        case 'gramer': return note.data.topic || 'Gramer';
+                                        case 'genel': return note.data.title || 'Genel Not';
+                                        default: return 'Yabancı Dil Notu';
+                                    }
+                                }
+                                return note.word || note.foreignWord || note.title || 'Başlıksız';
+                            },
+                            getContent: (note) => {
+                                if (note.data) {
+                                    switch(note.type) {
+                                        case 'kelime':
+                                            let content = `Türkçe: ${note.data.turkish || ''}`;
+                                            if (note.data.example) {
+                                                content += `\nÖrnek: ${note.data.example}`;
+                                            }
+                                            return content;
+                                        case 'cumle':
+                                            return `Yabancı: ${note.data.foreign || ''}\nTürkçe: ${note.data.turkish || ''}`;
+                                        case 'gramer':
+                                            let gramerContent = `Kural: ${note.data.rule || ''}`;
+                                            if (note.data.example) {
+                                                gramerContent += `\nÖrnek: ${note.data.example}`;
+                                            }
+                                            return gramerContent;
+                                        case 'genel':
+                                            return note.data.note || '';
+                                        default:
+                                            return JSON.stringify(note.data);
+                                    }
+                                }
+                                return note.meaning || note.turkishMeaning || note.note || '';
+                            }
+                        }
+                    };
+                    
+                    const typeInfo = typeMap[storageKey];
+                    if (typeInfo) {
+                        let title, content;
+                        
+                        if (typeInfo.getTitle) {
+                            title = typeInfo.getTitle(found);
+                        } else {
+                            title = found[typeInfo.titleKey] || 'Başlıksız';
+                        }
+                        
+                        if (typeInfo.getContent) {
+                            content = typeInfo.getContent(found);
+                        } else {
+                            content = found[typeInfo.contentKey] || '';
+                        }
+                        
+                        note = {
+                            ...found,
+                            type: typeInfo.type,
+                            typeName: typeInfo.name,
+                            title: title,
+                            content: content,
+                            storageKey: storageKey
+                        };
+                    }
+                }
+            }
+            
+            if (note) {
+                openNoteModal(note);
+            } else {
+                alert('Not bulunamadı!');
+            }
+        }
+        
+        function deleteNote(storageKey, noteId, subject) {
+            if (!confirm('Bu notu silmek istediğinizden emin misiniz?')) return;
+            
+            // ID karşılaştırması için yardımcı fonksiyon
+            const matchId = (id1, id2) => {
+                if (id1 == null || id2 == null) return false;
+                return String(id1) === String(id2) || Number(id1) === Number(id2);
+            };
+            
+            if (storageKey === 'gunluk-not') {
+                // Günlük notlar için özel işlem - direkt key'i sil
+                localStorage.removeItem('gunluk-not-' + noteId);
+            } else if (storageKey === 'study-notes' && subject) {
+                const notes = JSON.parse(localStorage.getItem('study-notes') || '{}');
+                if (notes[subject]) {
+                    notes[subject] = notes[subject].filter(n => !matchId(n.id || n.timestamp, noteId));
+                    if (notes[subject].length === 0) {
+                        delete notes[subject];
+                    }
+                    localStorage.setItem('study-notes', JSON.stringify(notes));
+                }
+            } else if (storageKey === 'language-notes') {
+                const languageNotesObj = JSON.parse(localStorage.getItem('language-notes') || '{}');
+                for (let language in languageNotesObj) {
+                    const notes = languageNotesObj[language] || [];
+                    const index = notes.findIndex(n => matchId(n.id || n.timestamp, noteId));
+                    if (index !== -1) {
+                        notes.splice(index, 1);
+                        if (notes.length === 0) {
+                            delete languageNotesObj[language];
+                        }
+                        localStorage.setItem('language-notes', JSON.stringify(languageNotesObj));
+                        break;
+                    }
+                }
+            } else {
+                // Diğer tüm not tipleri için (projects, meetings, travels, recipes, creative-ideas)
+                const notes = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                const filtered = notes.filter(n => !matchId(n.id || n.date, noteId));
+                localStorage.setItem(storageKey, JSON.stringify(filtered));
+            }
+            
+            displayNotes();
+        }
+        
+        // Event listeners
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.type;
+                displayNotes();
+            });
+        });
+        
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            displayNotes();
+        });
+        
+        // İlk yükleme
+        displayNotes();
+    </script>
+    
+    <!-- Not Görüntüleme Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">📝 Not Detayı</h2>
+                <button class="modal-close" onclick="closeNoteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modalTypeBadge" class="modal-type-badge"></div>
+                <div id="modalDate" class="modal-date"></div>
+                <div id="modalContent" class="modal-content-text"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-edit" onclick="editNoteFromModal()">✏️ Düzenle</button>
+                <button class="modal-btn modal-btn-delete" onclick="deleteNoteFromModal()">🗑️ Sil</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentModalNote = null;
+        
+        function openNoteModal(note) {
+            currentModalNote = note;
+            const modal = document.getElementById('noteModal');
+            
+            // Modal içeriğini doldur
+            document.getElementById('modalTitle').innerHTML = `📝 ${note.title}`;
+            document.getElementById('modalTypeBadge').textContent = note.typeName;
+            document.getElementById('modalTypeBadge').className = `modal-type-badge ${note.type}`;
+            
+            const date = new Date(note.createdAt || note.date || Date.now());
+            const formattedDate = date.toLocaleDateString('tr-TR', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('modalDate').innerHTML = `📅 ${formattedDate}`;
+            document.getElementById('modalContent').textContent = note.content || 'İçerik bulunamadı.';
+            
+            // Modal'ı aç
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeNoteModal() {
+            const modal = document.getElementById('noteModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentModalNote = null;
+        }
+        
+        function editNoteFromModal() {
+            if (currentModalNote) {
+                const pages = {
+                    'gunluk-not': 'gunluk-notlar.html',
+                    'projects': 'proje-notlari.html',
+                    'meetings': 'toplanti-notlari.html',
+                    'study-notes': 'ders-notlari.html',
+                    'creative-ideas': 'yaratici-fikirler.html',
+                    'travels': 'seyahat-notlari.html',
+                    'recipes': 'tarif-notlari.html',
+                    'language-notes': 'yabanci-dil-notlari.html'
+                };
+                
+                window.location.href = pages[currentModalNote.storageKey] || 'index.html';
+            }
+        }
+        
+        function deleteNoteFromModal() {
+            if (currentModalNote) {
+                if (confirm('Bu notu silmek istediğinizden emin misiniz?')) {
+                    deleteNote(currentModalNote.storageKey, currentModalNote.id || currentModalNote.date, currentModalNote.subject || '');
+                    closeNoteModal();
+                }
+            }
+        }
+        
+        // Modal dışına tıklandığında kapat
+        document.getElementById('noteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeNoteModal();
+            }
+        });
+        
+        // ESC tuşu ile kapat
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeNoteModal();
+            }
+        });
+    </script>
+    
+    <!-- Shared Header and Footer -->
+    <script src="shared-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fa709a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fee140;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#gradient3)"/>
+  
+  <!-- Meeting table (ellipse) -->
+  <ellipse cx="400" cy="350" rx="250" ry="150" fill="#8b4513" opacity="0.8"/>
+  <ellipse cx="400" cy="340" rx="250" ry="150" fill="#a0522d"/>
+  
+  <!-- Chairs around table -->
+  <ellipse cx="300" cy="250" rx="25" ry="35" fill="#654321"/>
+  <ellipse cx="500" cy="250" rx="25" ry="35" fill="#654321"/>
+  <ellipse cx="250" cy="350" rx="35" ry="25" fill="#654321"/>
+  <ellipse cx="550" cy="350" rx="35" ry="25" fill="#654321"/>
+  <ellipse cx="300" cy="450" rx="25" ry="35" fill="#654321"/>
+  <ellipse cx="500" cy="450" rx="25" ry="35" fill="#654321"/>
+  
+  <!-- Notebook on table -->
+  <rect x="350" y="300" width="100" height="80" rx="5" fill="#ffffff" stroke="#ccc" stroke-width="2"/>
+  
+  <!-- Spiral binding -->
+  <circle cx="365" cy="320" r="4" fill="none" stroke="#666" stroke-width="1"/>
+  <circle cx="365" cy="340" r="4" fill="none" stroke="#666" stroke-width="1"/>
+  <circle cx="365" cy="360" r="4" fill="none" stroke="#666" stroke-width="1"/>
+  
+  <!-- Writing on notebook -->
+  <line x1="380" y1="320" x2="435" y2="320" stroke="#333" stroke-width="1"/>
+  <line x1="380" y1="330" x2="425" y2="330" stroke="#333" stroke-width="1"/>
+  <line x1="380" y1="340" x2="440" y2="340" stroke="#333" stroke-width="1"/>
+  <line x1="380" y1="350" x2="420" y2="350" stroke="#333" stroke-width="1"/>
+  <line x1="380" y1="360" x2="430" y2="360" stroke="#333" stroke-width="1"/>
+  
+  <!-- Pen -->
+  <rect x="460" y="320" width="3" height="40" fill="#1e3a8a" transform="rotate(20 461.5 340)"/>
+  <circle cx="461.5" cy="315" r="2" fill="#ef4444" transform="rotate(20 461.5 340)"/>
+  
+  <!-- Coffee cup -->
+  <ellipse cx="320" cy="340" rx="15" ry="12" fill="#8b4513"/>
+  <ellipse cx="320" cy="338" rx="12" ry="10" fill="#d2691e"/>
+  <rect x="335" y="335" width="8" height="10" rx="4" fill="#8b4513"/>
+  
+  <!-- Meeting people silhouettes -->
+  <circle cx="200" cy="180" r="20" fill="#2c3e50" opacity="0.7"/>
+  <rect x="190" y="200" width="20" height="40" rx="10" fill="#2c3e50" opacity="0.7"/>
+  
+  <circle cx="600" cy="180" r="20" fill="#2c3e50" opacity="0.7"/>
+  <rect x="590" y="200" width="20" height="40" rx="10" fill="#2c3e50" opacity="0.7"/>
+  
+  <circle cx="150" cy="350" r="20" fill="#2c3e50" opacity="0.7"/>
+  <rect x="140" y="370" width="20" height="40" rx="10" fill="#2c3e50" opacity="0.7"/>
+  
+  <circle cx="650" cy="350" r="20" fill="#2c3e50" opacity="0.7"/>
+  <rect x="640" y="370" width="20" height="40" rx="10" fill="#2c3e50" opacity="0.7"/>
+  
+  <!-- Title -->
+  <text x="400" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#ffffff">Toplantı Notları</text>
+</svg>
