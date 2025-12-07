@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yabancı Dil Notları - NoteMaster</title>
+    <link href="templatemo-3d-coverflow.css" rel="stylesheet">
+    <style>
+        .note-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 20px 40px;
+        }
+        
+        .note-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 20px;
+        }
+        
+        .note-header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .note-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .language-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .languages-sidebar {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .languages-sidebar h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .language-input {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .language-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px 0 0 8px;
+            font-size: 14px;
+        }
+        
+        .language-input button {
+            padding: 8px 15px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+        
+        .languages-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .language-item {
+            background: white;
+            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .language-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .language-item.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .delete-language {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .language-item.active .delete-language {
+            color: white;
+        }
+        
+        .language-flag {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .notes-main {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .notes-main h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .note-type-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .note-type-tab {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .note-type-tab.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .note-editor {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            color: #000;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .saved-notes {
+            margin-top: 30px;
+        }
+        
+        .saved-note {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .note-type-badge {
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .note-content {
+            margin-bottom: 15px;
+        }
+        
+        .note-content .word-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .note-content .word {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .note-content .word strong {
+            color: #333;
+        }
+        
+        .note-item-actions {
+            text-align: right;
+        }
+        
+        .btn-small {
+            padding: 5px 12px;
+            font-size: 0.8em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
+        .btn-edit {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        .progress-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .language-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .note-type-tabs {
+                flex-direction: column;
+            }
+            
+            .note-container {
+                padding: 20px;
+            }
+            
+            .note-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">← Ana Sayfaya Dön</button>
+    
+    <div class="note-page">
+        <div class="note-container">
+            <div class="note-header">
+                <h1>🌍 Yabancı Dil Notları</h1>
+                <p>Dil öğrenme yolculuğunuzda kelimeler, cümleler ve notlarınız</p>
+            </div>
+            
+            <div class="language-layout">
+                <div class="languages-sidebar">
+                    <h3>Diller</h3>
+                    <div class="language-input">
+                        <input type="text" id="languageInput" placeholder="Dil adı">
+                        <button onclick="addLanguage()">+</button>
+                    </div>
+                    <ul class="languages-list" id="languagesList">
+                        <li class="language-item active" data-language="ingilizce">
+                            <span><span class="language-flag">🇺🇸</span>İngilizce</span>
+                            <button class="delete-language" onclick="deleteLanguage('ingilizce')">×</button>
+                        </li>
+                    </ul>
+                    
+                    <div class="progress-section">
+                        <h4>📈 İlerleme</h4>
+                        <div class="progress-item">
+                            <span>Toplam Kelime:</span>
+                            <span id="totalWords">0</span>
+                        </div>
+                        <div class="progress-item">
+                            <span>Bu Hafta:</span>
+                            <span id="thisWeekWords">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notes-main">
+                    <h3 id="currentLanguageTitle">İngilizce Notları</h3>
+                    
+                    <div class="note-type-tabs">
+                        <button class="note-type-tab active" data-type="kelime" onclick="selectNoteType('kelime')">Kelime</button>
+                        <button class="note-type-tab" data-type="cumle" onclick="selectNoteType('cumle')">Cümle</button>
+                        <button class="note-type-tab" data-type="gramer" onclick="selectNoteType('gramer')">Gramer</button>
+                        <button class="note-type-tab" data-type="genel" onclick="selectNoteType('genel')">Genel Not</button>
+                    </div>
+                    
+                    <div class="note-editor">
+                        <div id="kelimeForm" class="note-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="foreignWord">Yabancı Kelime</label>
+                                    <input type="text" id="foreignWord">
+                                </div>
+                                <div class="form-group">
+                                    <label for="turkishWord">Türkçe Anlamı</label>
+                                    <input type="text" id="turkishWord">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="wordExample">Örnek Cümle</label>
+                                <textarea id="wordExample" placeholder="Kelimenin kullanıldığı örnek cümle..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div id="cumleForm" class="note-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="foreignSentence">Yabancı Cümle</label>
+                                <textarea id="foreignSentence"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="turkishSentence">Türkçe Çeviri</label>
+                                <textarea id="turkishSentence"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div id="gramerForm" class="note-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="grammarTopic">Gramer Konusu</label>
+                                <input type="text" id="grammarTopic">
+                            </div>
+                            <div class="form-group">
+                                <label for="grammarRule">Kural/Açıklama</label>
+                                <textarea id="grammarRule"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="grammarExample">Örnekler</label>
+                                <textarea id="grammarExample"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div id="genelForm" class="note-form" style="display: none;">
+                            <div class="form-group">
+                                <label for="generalTitle">Başlık</label>
+                                <input type="text" id="generalTitle">
+                            </div>
+                            <div class="form-group">
+                                <label for="generalNote">Not</label>
+                                <textarea id="generalNote"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="note-actions">
+                            <button class="btn btn-primary" onclick="saveNote()">Notu Kaydet</button>
+                            <button class="btn btn-secondary" onclick="clearNote()">Temizle</button>
+                        </div>
+                    </div>
+                    
+                    <div class="saved-notes">
+                        <h4>Kaydedilen Notlar</h4>
+                        <div id="notesList">
+                            <div class="empty-state">Bu dil için henüz not kaydedilmemiş.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let languages = JSON.parse(localStorage.getItem('languages')) || ['ingilizce'];
+        let languageNotes = JSON.parse(localStorage.getItem('language-notes')) || {};
+        let currentLanguage = 'ingilizce';
+        let currentNoteType = 'kelime';
+        let editingNoteId = null;
+        
+        const languageFlags = {
+            'ingilizce': '🇺🇸',
+            'almanca': '🇩🇪', 
+            'fransizca': '🇫🇷',
+            'ispanyolca': '🇪🇸',
+            'italyanca': '🇮🇹',
+            'rusca': '🇷🇺',
+            'japonca': '🇯🇵',
+            'cinceE': '🇨🇳',
+            'korece': '🇰🇷',
+            'arapca': '🇸🇦'
+        };
+        
+        function goBack() {
+            window.history.back();
+        }
+        
+        function addLanguage() {
+            const input = document.getElementById('languageInput');
+            const languageName = input.value.trim().toLowerCase();
+            
+            if (languageName && !languages.includes(languageName)) {
+                languages.push(languageName);
+                saveLanguages();
+                displayLanguages();
+                input.value = '';
+            }
+        }
+        
+        function deleteLanguage(language) {
+            if (language === 'ingilizce') {
+                alert('İngilizce dili silinemez.');
+                return;
+            }
+            
+            if (confirm(`${language} dilini ve tüm notlarını silmek istediğinizden emin misiniz?`)) {
+                languages = languages.filter(l => l !== language);
+                delete languageNotes[language];
+                saveLanguages();
+                saveNotes();
+                displayLanguages();
+                
+                if (currentLanguage === language) {
+                    selectLanguage('ingilizce');
+                }
+            }
+        }
+        
+        function selectLanguage(language) {
+            currentLanguage = language;
+            document.getElementById('currentLanguageTitle').textContent = capitalizeFirst(language) + ' Notları';
+            
+            // Update active language
+            document.querySelectorAll('.language-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.language === language);
+            });
+            
+            clearNote();
+            displayNotes();
+            updateProgress();
+        }
+        
+        function selectNoteType(type) {
+            currentNoteType = type;
+            
+            // Update active tab
+            document.querySelectorAll('.note-type-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.type === type);
+            });
+            
+            // Show/hide forms
+            document.querySelectorAll('.note-form').forEach(form => {
+                form.style.display = 'none';
+            });
+            document.getElementById(type + 'Form').style.display = 'block';
+            
+            clearNote();
+        }
+        
+        function saveNote() {
+            const noteData = getNoteData();
+            if (!noteData) return;
+            
+            if (!languageNotes[currentLanguage]) {
+                languageNotes[currentLanguage] = [];
+            }
+            
+            const note = {
+                id: editingNoteId || Date.now(),
+                type: currentNoteType,
+                data: noteData,
+                date: new Date().toISOString(),
+                language: currentLanguage
+            };
+            
+            if (editingNoteId) {
+                const index = languageNotes[currentLanguage].findIndex(n => n.id === editingNoteId);
+                languageNotes[currentLanguage][index] = note;
+                editingNoteId = null;
+            } else {
+                languageNotes[currentLanguage].push(note);
+            }
+            
+            saveNotes();
+            displayNotes();
+            updateProgress();
+            clearNote();
+        }
+        
+        function getNoteData() {
+            switch(currentNoteType) {
+                case 'kelime':
+                    const foreignWord = document.getElementById('foreignWord').value.trim();
+                    const turkishWord = document.getElementById('turkishWord').value.trim();
+                    if (!foreignWord || !turkishWord) {
+                        alert('Lütfen hem yabancı kelimeyi hem de Türkçe anlamını girin.');
+                        return null;
+                    }
+                    return {
+                        foreign: foreignWord,
+                        turkish: turkishWord,
+                        example: document.getElementById('wordExample').value.trim()
+                    };
+                    
+                case 'cumle':
+                    const foreignSentence = document.getElementById('foreignSentence').value.trim();
+                    const turkishSentence = document.getElementById('turkishSentence').value.trim();
+                    if (!foreignSentence || !turkishSentence) {
+                        alert('Lütfen hem yabancı cümleyi hem de Türkçe çevirisini girin.');
+                        return null;
+                    }
+                    return {
+                        foreign: foreignSentence,
+                        turkish: turkishSentence
+                    };
+                    
+                case 'gramer':
+                    const grammarTopic = document.getElementById('grammarTopic').value.trim();
+                    const grammarRule = document.getElementById('grammarRule').value.trim();
+                    if (!grammarTopic || !grammarRule) {
+                        alert('Lütfen gramer konusunu ve kuralını girin.');
+                        return null;
+                    }
+                    return {
+                        topic: grammarTopic,
+                        rule: grammarRule,
+                        example: document.getElementById('grammarExample').value.trim()
+                    };
+                    
+                case 'genel':
+                    const generalTitle = document.getElementById('generalTitle').value.trim();
+                    const generalNote = document.getElementById('generalNote').value.trim();
+                    if (!generalTitle || !generalNote) {
+                        alert('Lütfen başlık ve notu girin.');
+                        return null;
+                    }
+                    return {
+                        title: generalTitle,
+                        note: generalNote
+                    };
+            }
+        }
+        
+        function clearNote() {
+            document.querySelectorAll('.note-form input, .note-form textarea').forEach(input => {
+                input.value = '';
+            });
+            editingNoteId = null;
+        }
+        
+        function saveLanguages() {
+            localStorage.setItem('languages', JSON.stringify(languages));
+        }
+        
+        function saveNotes() {
+            localStorage.setItem('language-notes', JSON.stringify(languageNotes));
+        }
+        
+        function displayLanguages() {
+            const container = document.getElementById('languagesList');
+            container.innerHTML = languages.map(language => `
+                <li class="language-item ${language === currentLanguage ? 'active' : ''}" data-language="${language}" onclick="selectLanguage('${language}')">
+                    <span><span class="language-flag">${languageFlags[language] || '🌍'}</span>${capitalizeFirst(language)}</span>
+                    <button class="delete-language" onclick="event.stopPropagation(); deleteLanguage('${language}')">×</button>
+                </li>
+            `).join('');
+        }
+        
+        function displayNotes() {
+            const container = document.getElementById('notesList');
+            const notes = languageNotes[currentLanguage] || [];
+            
+            if (notes.length === 0) {
+                container.innerHTML = '<div class="empty-state">Bu dil için henüz not kaydedilmemiş.</div>';
+                return;
+            }
+            
+            const sortedNotes = [...notes].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = sortedNotes.map(note => `
+                <div class="saved-note">
+                    <div class="note-meta">
+                        <span class="note-type-badge">${getNoteTypeText(note.type)}</span>
+                        <span>${new Date(note.date).toLocaleDateString('tr-TR')}</span>
+                    </div>
+                    <div class="note-content">
+                        ${formatNoteContent(note)}
+                    </div>
+                    <div class="note-item-actions">
+                        <button class="btn-small btn-edit" onclick="editNote(${note.id})">Düzenle</button>
+                        <button class="btn-small btn-delete" onclick="deleteNote(${note.id})">Sil</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function formatNoteContent(note) {
+            switch(note.type) {
+                case 'kelime':
+                    return `
+                        <div class="word-pair">
+                            <div class="word"><strong>${note.data.foreign}</strong></div>
+                            <div class="word"><strong>${note.data.turkish}</strong></div>
+                        </div>
+                        ${note.data.example ? `<p><em>Örnek: ${note.data.example}</em></p>` : ''}
+                    `;
+                case 'cumle':
+                    return `
+                        <div class="word-pair">
+                            <div class="word">${note.data.foreign}</div>
+                            <div class="word">${note.data.turkish}</div>
+                        </div>
+                    `;
+                case 'gramer':
+                    return `
+                        <h5>${note.data.topic}</h5>
+                        <p>${note.data.rule}</p>
+                        ${note.data.example ? `<p><em>Örnek: ${note.data.example}</em></p>` : ''}
+                    `;
+                case 'genel':
+                    return `
+                        <h5>${note.data.title}</h5>
+                        <p>${note.data.note}</p>
+                    `;
+            }
+        }
+        
+        function getNoteTypeText(type) {
+            const types = {
+                'kelime': 'Kelime',
+                'cumle': 'Cümle', 
+                'gramer': 'Gramer',
+                'genel': 'Genel'
+            };
+            return types[type] || type;
+        }
+        
+        function editNote(noteId) {
+            const notes = languageNotes[currentLanguage] || [];
+            const note = notes.find(n => n.id === noteId);
+            if (!note) return;
+            
+            editingNoteId = noteId;
+            selectNoteType(note.type);
+            
+            // Fill form with note data
+            switch(note.type) {
+                case 'kelime':
+                    document.getElementById('foreignWord').value = note.data.foreign || '';
+                    document.getElementById('turkishWord').value = note.data.turkish || '';
+                    document.getElementById('wordExample').value = note.data.example || '';
+                    break;
+                case 'cumle':
+                    document.getElementById('foreignSentence').value = note.data.foreign || '';
+                    document.getElementById('turkishSentence').value = note.data.turkish || '';
+                    break;
+                case 'gramer':
+                    document.getElementById('grammarTopic').value = note.data.topic || '';
+                    document.getElementById('grammarRule').value = note.data.rule || '';
+                    document.getElementById('grammarExample').value = note.data.example || '';
+                    break;
+                case 'genel':
+                    document.getElementById('generalTitle').value = note.data.title || '';
+                    document.getElementById('generalNote').value = note.data.note || '';
+                    break;
+            }
+            
+            document.querySelector('.note-editor').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function deleteNote(noteId) {
+            if (confirm('Bu notu silmek istediğinizden emin misiniz?')) {
+                languageNotes[currentLanguage] = languageNotes[currentLanguage].filter(n => n.id !== noteId);
+                saveNotes();
+                displayNotes();
+                updateProgress();
+            }
+        }
+        
+        function updateProgress() {
+            const notes = languageNotes[currentLanguage] || [];
+            const totalWords = notes.filter(n => n.type === 'kelime').length;
+            
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            const thisWeekWords = notes.filter(n => 
+                n.type === 'kelime' && new Date(n.date) > oneWeekAgo
+            ).length;
+            
+            document.getElementById('totalWords').textContent = totalWords;
+            document.getElementById('thisWeekWords').textContent = thisWeekWords;
+        }
+        
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        
+        // Enter key to add language
+        document.getElementById('languageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addLanguage();
+            }
+        });
+        
+        // Initialize
+        displayLanguages();
+        displayNotes();
+        updateProgress();
+    </script>
+    
+    <!-- Shared Header and Footer -->
+    <script src="shared-components.js"></script>
+</body>
+</html>

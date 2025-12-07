@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarif Notları - NoteMaster</title>
+    <link href="templatemo-3d-coverflow.css" rel="stylesheet">
+    <style>
+        .note-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 20px 40px;
+        }
+        
+        .note-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 20px;
+        }
+        
+        .note-header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .note-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .recipe-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .recipe-form, .recipe-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .recipe-form h3, .recipe-list h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            color: #000;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .recipe-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .recipe-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .recipe-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .recipe-category {
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .recipe-difficulty {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .recipe-difficulty.kolay {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .recipe-difficulty.orta {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .recipe-difficulty.zor {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .recipe-content {
+            margin-top: 15px;
+        }
+        
+        .recipe-section {
+            margin-bottom: 15px;
+        }
+        
+        .recipe-section h5 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        
+        .recipe-section p {
+            color: #555;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        .recipe-actions {
+            margin-top: 15px;
+            text-align: right;
+        }
+        
+        .btn-small {
+            padding: 6px 15px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-small:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .recipe-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .note-container {
+                padding: 20px;
+            }
+            
+            .note-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">← Ana Sayfaya Dön</button>
+    
+    <div class="note-page">
+        <div class="note-container">
+            <div class="note-header">
+                <h1>👩‍🍳 Tarif Notları</h1>
+                <p>Favori yemek tarifleriniz ve mutfak notları</p>
+            </div>
+            
+            <div class="recipe-layout">
+                <div class="recipe-form">
+                    <h3>Yeni Tarif Ekle</h3>
+                    <form id="recipeForm">
+                        <div class="form-group">
+                            <label for="recipeName">Tarif Adı</label>
+                            <input type="text" id="recipeName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recipeCategory">Kategori</label>
+                            <select id="recipeCategory">
+                                <option value="ana-yemek">Ana Yemek</option>
+                                <option value="corba">Çorba</option>
+                                <option value="tatli">Tatlı</option>
+                                <option value="salata">Salata</option>
+                                <option value="atistirmalik">Atıştırmalık</option>
+                                <option value="icecek">İçecek</option>
+                                <option value="diger">Diğer</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recipeDifficulty">Zorluk Seviyesi</label>
+                            <select id="recipeDifficulty">
+                                <option value="kolay">Kolay</option>
+                                <option value="orta" selected>Orta</option>
+                                <option value="zor">Zor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recipeIngredients">Malzemeler</label>
+                            <textarea id="recipeIngredients" placeholder="Malzemeleri listeleyin (her satıra bir malzeme)..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recipeInstructions">Yapılışı</label>
+                            <textarea id="recipeInstructions" placeholder="Tarif adımlarını detaylı olarak yazın..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recipeNotes">Notlar</label>
+                            <textarea id="recipeNotes" placeholder="İpuçları, alternatifler, kişisel notlarınız..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">Tarifi Kaydet</button>
+                    </form>
+                </div>
+                
+                <div class="recipe-list">
+                    <h3>Tarif Defterim</h3>
+                    <div id="recipesList">
+                        <div class="empty-state">
+                            Henüz tarif eklenmemiş. Sol taraftan yeni tarif ekleyebilirsiniz.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        let editingIndex = -1;
+        
+        function goBack() {
+            window.history.back();
+        }
+        
+        document.getElementById('recipeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const recipe = {
+                id: editingIndex >= 0 ? recipes[editingIndex].id : Date.now(),
+                name: document.getElementById('recipeName').value,
+                category: document.getElementById('recipeCategory').value,
+                difficulty: document.getElementById('recipeDifficulty').value,
+                ingredients: document.getElementById('recipeIngredients').value,
+                instructions: document.getElementById('recipeInstructions').value,
+                notes: document.getElementById('recipeNotes').value,
+                createdAt: editingIndex >= 0 ? recipes[editingIndex].createdAt : new Date().toISOString()
+            };
+            
+            if (editingIndex >= 0) {
+                recipes[editingIndex] = recipe;
+                editingIndex = -1;
+                document.querySelector('.btn').textContent = 'Tarifi Kaydet';
+            } else {
+                recipes.push(recipe);
+            }
+            
+            saveRecipes();
+            displayRecipes();
+            this.reset();
+        });
+        
+        function saveRecipes() {
+            localStorage.setItem('recipes', JSON.stringify(recipes));
+        }
+        
+        function displayRecipes() {
+            const container = document.getElementById('recipesList');
+            
+            if (recipes.length === 0) {
+                container.innerHTML = '<div class="empty-state">Henüz tarif eklenmemiş. Sol taraftan yeni tarif ekleyebilirsiniz.</div>';
+                return;
+            }
+            
+            const sortedRecipes = [...recipes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            container.innerHTML = sortedRecipes.map((recipe, index) => {
+                const originalIndex = recipes.findIndex(r => r.id === recipe.id);
+                return `
+                    <div class="recipe-item">
+                        <div class="recipe-title">${recipe.name}</div>
+                        <div class="recipe-meta">
+                            <span class="recipe-category">${getCategoryText(recipe.category)}</span>
+                            <span class="recipe-difficulty ${recipe.difficulty}">${getDifficultyText(recipe.difficulty)}</span>
+                        </div>
+                        <div class="recipe-content">
+                            <div class="recipe-section">
+                                <h5>🥘 Malzemeler:</h5>
+                                <p>${recipe.ingredients || 'Malzeme listesi eklenmemiş'}</p>
+                            </div>
+                            <div class="recipe-section">
+                                <h5>👨‍🍳 Yapılışı:</h5>
+                                <p>${recipe.instructions || 'Yapılış tarifi eklenmemiş'}</p>
+                            </div>
+                            ${recipe.notes ? `
+                            <div class="recipe-section">
+                                <h5>📝 Notlar:</h5>
+                                <p>${recipe.notes}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn-small btn-edit" onclick="editRecipe(${originalIndex})">Düzenle</button>
+                            <button class="btn-small btn-delete" onclick="deleteRecipe(${originalIndex})">Sil</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function getCategoryText(category) {
+            const categories = {
+                'ana-yemek': 'Ana Yemek',
+                'corba': 'Çorba',
+                'tatli': 'Tatlı',
+                'salata': 'Salata',
+                'atistirmalik': 'Atıştırmalık',
+                'icecek': 'İçecek',
+                'diger': 'Diğer'
+            };
+            return categories[category] || 'Diğer';
+        }
+        
+        function getDifficultyText(difficulty) {
+            const difficulties = {
+                'kolay': 'Kolay',
+                'orta': 'Orta',
+                'zor': 'Zor'
+            };
+            return difficulties[difficulty] || 'Orta';
+        }
+        
+        function editRecipe(index) {
+            const recipe = recipes[index];
+            editingIndex = index;
+            
+            document.getElementById('recipeName').value = recipe.name;
+            document.getElementById('recipeCategory').value = recipe.category;
+            document.getElementById('recipeDifficulty').value = recipe.difficulty;
+            document.getElementById('recipeIngredients').value = recipe.ingredients || '';
+            document.getElementById('recipeInstructions').value = recipe.instructions || '';
+            document.getElementById('recipeNotes').value = recipe.notes || '';
+            
+            document.querySelector('.btn').textContent = 'Tarifi Güncelle';
+            
+            document.querySelector('.recipe-form').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function deleteRecipe(index) {
+            if (confirm('Bu tarifi silmek istediğinizden emin misiniz?')) {
+                recipes.splice(index, 1);
+                saveRecipes();
+                displayRecipes();
+            }
+        }
+        
+        displayRecipes();
+    </script>
+    
+    <!-- Shared Header and Footer -->
+    <script src="shared-components.js"></script>
+</body>
+</html>

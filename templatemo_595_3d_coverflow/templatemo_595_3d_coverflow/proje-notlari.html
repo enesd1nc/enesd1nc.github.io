@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Notları - NoteMaster</title>
+    <link href="templatemo-3d-coverflow.css" rel="stylesheet">
+    <style>
+        .note-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 20px 40px;
+        }
+        
+        .note-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 20px;
+        }
+        
+        .note-header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .note-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .project-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .project-form, .project-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .project-form h3, .project-list h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            color: #000;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .priority-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .priority-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .priority-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .priority-btn.low.active { background: #28a745; border-color: #28a745; }
+        .priority-btn.medium.active { background: #ffc107; border-color: #ffc107; color: #333; }
+        .priority-btn.high.active { background: #dc3545; border-color: #dc3545; }
+        
+        .project-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .project-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .project-item.low { border-left-color: #28a745; }
+        .project-item.medium { border-left-color: #ffc107; }
+        .project-item.high { border-left-color: #dc3545; }
+        
+        .project-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .priority-badge.low { background: #d4edda; color: #155724; }
+        .priority-badge.medium { background: #fff3cd; color: #856404; }
+        .priority-badge.high { background: #f8d7da; color: #721c24; }
+        
+        .project-description {
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .project-actions {
+            margin-top: 15px;
+            text-align: right;
+        }
+        
+        .btn-small {
+            padding: 6px 15px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-small:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .project-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .note-container {
+                padding: 20px;
+            }
+            
+            .note-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">← Ana Sayfaya Dön</button>
+    
+    <div class="note-page">
+        <div class="note-container">
+            <div class="note-header">
+                <h1>🚀 Proje Notları</h1>
+                <p>İş projeleriniz ve görevleriniz için detaylı notlar</p>
+            </div>
+            
+            <div class="project-layout">
+                <div class="project-form">
+                    <h3>Yeni Proje Ekle</h3>
+                    <form id="projectForm">
+                        <div class="form-group">
+                            <label for="projectName">Proje Adı</label>
+                            <input type="text" id="projectName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectDescription">Proje Açıklaması</label>
+                            <textarea id="projectDescription" placeholder="Proje detayları, hedefler, notlar..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectDeadline">Bitiş Tarihi</label>
+                            <input type="date" id="projectDeadline">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Öncelik Seviyesi</label>
+                            <div class="priority-selector">
+                                <button type="button" class="priority-btn low" data-priority="low">Düşük</button>
+                                <button type="button" class="priority-btn medium active" data-priority="medium">Orta</button>
+                                <button type="button" class="priority-btn high" data-priority="high">Yüksek</button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn">Proje Ekle</button>
+                    </form>
+                </div>
+                
+                <div class="project-list">
+                    <h3>Aktif Projeler</h3>
+                    <div id="projectsList">
+                        <div class="empty-state">
+                            Henüz proje eklenmemiş. Sol taraftan yeni proje ekleyebilirsiniz.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let projects = JSON.parse(localStorage.getItem('projects')) || [];
+        let selectedPriority = 'medium';
+        let editingIndex = -1;
+        
+        function goBack() {
+            window.history.back();
+        }
+        
+        // Priority selector
+        document.querySelectorAll('.priority-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedPriority = btn.dataset.priority;
+            });
+        });
+        
+        // Form submission
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const project = {
+                id: editingIndex >= 0 ? projects[editingIndex].id : Date.now(),
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('projectDescription').value,
+                deadline: document.getElementById('projectDeadline').value,
+                priority: selectedPriority,
+                createdAt: editingIndex >= 0 ? projects[editingIndex].createdAt : new Date().toISOString()
+            };
+            
+            if (editingIndex >= 0) {
+                projects[editingIndex] = project;
+                editingIndex = -1;
+                document.querySelector('.btn').textContent = 'Proje Ekle';
+            } else {
+                projects.push(project);
+            }
+            
+            saveProjects();
+            displayProjects();
+            this.reset();
+            
+            // Reset priority to medium
+            document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-priority="medium"]').classList.add('active');
+            selectedPriority = 'medium';
+        });
+        
+        function saveProjects() {
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
+        
+        function displayProjects() {
+            const container = document.getElementById('projectsList');
+            
+            if (projects.length === 0) {
+                container.innerHTML = '<div class="empty-state">Henüz proje eklenmemiş. Sol taraftan yeni proje ekleyebilirsiniz.</div>';
+                return;
+            }
+            
+            container.innerHTML = projects.map((project, index) => `
+                <div class="project-item ${project.priority}">
+                    <div class="project-title">${project.name}</div>
+                    <div class="project-meta">
+                        <span class="priority-badge ${project.priority}">${getPriorityText(project.priority)}</span>
+                        ${project.deadline ? `<span>📅 ${formatDate(project.deadline)}</span>` : ''}
+                    </div>
+                    <div class="project-description">${project.description || 'Açıklama eklenmemiş'}</div>
+                    <div class="project-actions">
+                        <button class="btn-small btn-edit" onclick="editProject(${index})">Düzenle</button>
+                        <button class="btn-small btn-delete" onclick="deleteProject(${index})">Sil</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function getPriorityText(priority) {
+            const texts = { low: 'Düşük', medium: 'Orta', high: 'Yüksek' };
+            return texts[priority] || 'Orta';
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('tr-TR');
+        }
+        
+        function editProject(index) {
+            const project = projects[index];
+            editingIndex = index;
+            
+            document.getElementById('projectName').value = project.name;
+            document.getElementById('projectDescription').value = project.description || '';
+            document.getElementById('projectDeadline').value = project.deadline || '';
+            
+            // Set priority
+            document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-priority="${project.priority}"]`).classList.add('active');
+            selectedPriority = project.priority;
+            
+            document.querySelector('.btn').textContent = 'Projeyi Güncelle';
+            
+            // Scroll to form
+            document.querySelector('.project-form').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function deleteProject(index) {
+            if (confirm('Bu projeyi silmek istediğinizden emin misiniz?')) {
+                projects.splice(index, 1);
+                saveProjects();
+                displayProjects();
+            }
+        }
+        
+        // Initialize
+        displayProjects();
+    </script>
+    
+    <!-- Shared Header and Footer -->
+    <script src="shared-components.js"></script>
+</body>
+</html>

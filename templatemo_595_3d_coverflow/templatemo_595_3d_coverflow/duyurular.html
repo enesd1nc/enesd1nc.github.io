@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duyurular & Kampanyalar - NoteMaster</title>
+    <link href="templatemo-3d-coverflow.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .panel-title {
+            font-size: 1.5em;
+            color: #FF6B6B;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            color: #000;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #FF6B6B;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #FF6B6B;
+            background: rgba(255, 107, 107, 0.05);
+        }
+        
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-label {
+            display: block;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .file-type-icons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .file-type-icon {
+            padding: 8px 15px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .selected-files {
+            margin-top: 15px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .file-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .file-icon {
+            font-size: 1.5em;
+        }
+        
+        .remove-file-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .remove-file-btn:hover {
+            background: #ff3838;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .announcement-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .announcement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .announcement-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .announcement-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            color: white;
+        }
+        
+        .announcement-content {
+            padding: 25px;
+        }
+        
+        .announcement-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .announcement-date {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .announcement-preview {
+            color: #666;
+            line-height: 1.6;
+            max-height: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 15px;
+        }
+        
+        .announcement-attachments {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .attachment-badge {
+            padding: 5px 12px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .announcement-footer {
+            padding: 15px 25px;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .view-btn {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .delete-announcement-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .delete-announcement-btn:hover {
+            background: #c82333;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 3% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        
+        .modal-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            padding-right: 40px;
+        }
+        
+        .modal-date {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+        
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 25px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 35px;
+        }
+        
+        .modal-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .modal-content-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 30px;
+            white-space: pre-wrap;
+        }
+        
+        .modal-attachments {
+            border-top: 2px solid #f0f0f0;
+            padding-top: 25px;
+        }
+        
+        .attachments-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .attachment-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .attachment-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .attachment-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .attachment-icon {
+            font-size: 2em;
+        }
+        
+        .attachment-details {
+            flex: 1;
+        }
+        
+        .attachment-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        
+        .attachment-size {
+            font-size: 0.85em;
+            color: #999;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-panel-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toggle-panel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .announcements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Ana Sayfaya Dön</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>📢</span>
+                Duyurular & Kampanyalar
+                <span>🎉</span>
+            </h1>
+            <p>Güncel haberler, özel kampanyalar ve önemli duyurular</p>
+        </div>
+        
+        <!-- Admin Panel Toggle -->
+        <button class="toggle-panel-btn" id="togglePanel">
+            ➕ Yeni Duyuru Ekle
+        </button>
+        
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="adminPanel" style="display: none;">
+            <h2 class="panel-title">🛠️ Duyuru Yönetim Paneli</h2>
+            
+            <div class="form-group">
+                <label for="announcementTitle">📝 Duyuru Başlığı *</label>
+                <input type="text" id="announcementTitle" placeholder="Örn: Özel İndirim Kampanyası" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="announcementType">🏷️ Duyuru Tipi</label>
+                <select id="announcementType">
+                    <option value="Kampanya">🎁 Kampanya</option>
+                    <option value="Duyuru">📢 Duyuru</option>
+                    <option value="Haber">📰 Haber</option>
+                    <option value="Güncelleme">🔄 Güncelleme</option>
+                    <option value="Etkinlik">🎪 Etkinlik</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="announcementContent">📄 İçerik *</label>
+                <textarea id="announcementContent" placeholder="Duyuru içeriğini buraya yazın..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>📎 Dosya Ekle (PDF, Word, Resim)</label>
+                <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif">
+                    <div class="file-upload-label">
+                        📁 Dosya seçmek için tıklayın veya sürükleyin
+                    </div>
+                    <div class="file-type-icons">
+                        <span class="file-type-icon">📄 PDF</span>
+                        <span class="file-type-icon">📝 Word</span>
+                        <span class="file-type-icon">🖼️ Resim</span>
+                    </div>
+                </div>
+                <div class="selected-files" id="selectedFiles"></div>
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn btn-primary" id="saveAnnouncement">💾 Duyuru Kaydet</button>
+                <button class="btn btn-secondary" id="resetForm">🔄 Formu Temizle</button>
+            </div>
+        </div>
+        
+        <!-- Announcements Grid -->
+        <div class="announcements-grid" id="announcementsGrid"></div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="announcementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <div class="modal-date" id="modalDate"></div>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" class="modal-image" style="display: none;">
+                <div class="modal-content-text" id="modalContent"></div>
+                <div class="modal-attachments" id="modalAttachments" style="display: none;">
+                    <h3 class="attachments-title">📎 Ekli Dosyalar</h3>
+                    <div class="attachment-list" id="attachmentList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Default announcements
+        const defaultAnnouncements = [
+            {
+                id: Date.now() + 1,
+                title: 'NoteMaster Premium Kampanyası',
+                type: 'Kampanya',
+                content: 'Sınırlı süreliğine NoteMaster Premium üyeliğinde %50 indirim! Tüm premium özelliklere erişim kazanın: Sınırsız not depolama, gelişmiş arama, bulut senkronizasyon ve daha fazlası.\n\nKampanya 31 Aralık 2025 tarihine kadar geçerlidir.',
+                date: new Date().toISOString(),
+                icon: '🎁',
+                attachments: [
+                    { name: 'Kampanya_Detaylari.pdf', type: 'pdf', size: '245 KB', icon: '📄' },
+                    { name: 'Premium_Ozellikler.docx', type: 'docx', size: '128 KB', icon: '📝' }
+                ]
+            },
+            {
+                id: Date.now() + 2,
+                title: 'Yeni Özellik: Sesli Not Alma',
+                type: 'Güncelleme',
+                content: 'Artık notlarınızı sesli olarak kaydedebilirsiniz! Yeni sesli not özelliğimizle düşüncelerinizi hızla kaydedin ve otomatik metin dönüşümü ile yazıya çevirin.\n\nSesli not özelliği tüm kullanıcılar için ücretsiz olarak sunulmaktadır.',
+                date: new Date(Date.now() - 86400000).toISOString(),
+                icon: '🎤',
+                attachments: [
+                    { name: 'Sesli_Not_Kullanim_Kilavuzu.pdf', type: 'pdf', size: '512 KB', icon: '📄' }
+                ]
+            },
+            {
+                id: Date.now() + 3,
+                title: 'Verimlilik Webinarı - 15 Aralık',
+                type: 'Etkinlik',
+                content: 'NoteMaster ile verimliliğinizi artırmanın en iyi yollarını öğrenin! Uzman eğitmenlerimiz tarafından düzenlenecek ücretsiz webinara katılın.\n\nTarih: 15 Aralık 2025, Saat: 19:00\nKatılım linki etkinlik gününden 1 saat önce e-posta ile gönderilecektir.',
+                date: new Date(Date.now() - 172800000).toISOString(),
+                icon: '🎪',
+                attachments: [
+                    { name: 'Webinar_Programi.pdf', type: 'pdf', size: '156 KB', icon: '📄' },
+                    { name: 'Verimlilik_Ipuclari.docx', type: 'docx', size: '89 KB', icon: '📝' }
+                ]
+            },
+            {
+                id: Date.now() + 4,
+                title: 'Bakım Çalışması Duyurusu',
+                type: 'Duyuru',
+                content: 'Sistem iyileştirmeleri için planlı bakım çalışması yapılacaktır.\n\nTarih: 10 Aralık 2025\nSaat: 02:00 - 04:00\n\nBu süre zarfında sistemde kısa süreli kesintiler yaşanabilir. Anlayışınız için teşekkür ederiz.',
+                date: new Date(Date.now() - 259200000).toISOString(),
+                icon: '🔧',
+                attachments: []
+            },
+            {
+                id: Date.now() + 5,
+                title: 'Mobil Uygulama Beta Sürümü Yayında',
+                type: 'Haber',
+                content: 'NoteMaster mobil uygulamasının beta sürümü artık iOS ve Android platformlarında mevcut! Notlarınıza her yerden erişin ve çevrimdışı çalışma özelliğinden faydalanın.\n\nBeta testine katılmak için kayıt formunu doldurun.',
+                date: new Date(Date.now() - 345600000).toISOString(),
+                icon: '📱',
+                attachments: [
+                    { name: 'Mobil_App_Tanitim.pdf', type: 'pdf', size: '1.2 MB', icon: '📄' },
+                    { name: 'Beta_Test_Formu.docx', type: 'docx', size: '45 KB', icon: '📝' }
+                ]
+            }
+        ];
+        
+        // Initialize announcements from localStorage or use defaults
+        let announcements = JSON.parse(localStorage.getItem('announcements')) || defaultAnnouncements;
+        
+        // Save default announcements if not exists
+        if (!localStorage.getItem('announcements')) {
+            localStorage.setItem('announcements', JSON.stringify(defaultAnnouncements));
+        }
+        
+        let selectedFiles = [];
+        
+        // Toggle admin panel
+        document.getElementById('togglePanel').addEventListener('click', () => {
+            const panel = document.getElementById('adminPanel');
+            const btn = document.getElementById('togglePanel');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                btn.textContent = '➖ Paneli Kapat';
+            } else {
+                panel.style.display = 'none';
+                btn.textContent = '➕ Yeni Duyuru Ekle';
+            }
+        });
+        
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                const fileObj = {
+                    name: file.name,
+                    type: file.name.split('.').pop().toLowerCase(),
+                    size: formatFileSize(file.size),
+                    icon: getFileIcon(file.name),
+                    data: file
+                };
+                selectedFiles.push(fileObj);
+            });
+            displaySelectedFiles();
+        });
+        
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+        
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            if (['pdf'].includes(ext)) return '📄';
+            if (['doc', 'docx'].includes(ext)) return '📝';
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return '🖼️';
+            return '📎';
+        }
+        
+        function displaySelectedFiles() {
+            const container = document.getElementById('selectedFiles');
+            container.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-item-info">
+                        <span class="file-icon">${file.icon}</span>
+                        <div>
+                            <div style="font-weight: 600;">${file.name}</div>
+                            <div style="font-size: 0.85em; color: #999;">${file.size}</div>
+                        </div>
+                    </div>
+                    <button class="remove-file-btn" onclick="removeFile(${index})">✕</button>
+                </div>
+            `).join('');
+        }
+        
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displaySelectedFiles();
+        }
+        
+        // Save announcement
+        document.getElementById('saveAnnouncement').addEventListener('click', () => {
+            const title = document.getElementById('announcementTitle').value.trim();
+            const type = document.getElementById('announcementType').value;
+            const content = document.getElementById('announcementContent').value.trim();
+            
+            if (!title || !content) {
+                alert('⚠️ Lütfen başlık ve içerik alanlarını doldurun!');
+                return;
+            }
+            
+            const typeIcons = {
+                'Kampanya': '🎁',
+                'Duyuru': '📢',
+                'Haber': '📰',
+                'Güncelleme': '🔄',
+                'Etkinlik': '🎪'
+            };
+            
+            const newAnnouncement = {
+                id: Date.now(),
+                title,
+                type,
+                content,
+                date: new Date().toISOString(),
+                icon: typeIcons[type],
+                attachments: selectedFiles.map(f => ({
+                    name: f.name,
+                    type: f.type,
+                    size: f.size,
+                    icon: f.icon
+                }))
+            };
+            
+            announcements.unshift(newAnnouncement);
+            localStorage.setItem('announcements', JSON.stringify(announcements));
+            
+            displayAnnouncements();
+            resetForm();
+            
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('togglePanel').textContent = '➕ Yeni Duyuru Ekle';
+            
+            alert('✅ Duyuru başarıyla kaydedildi!');
+        });
+        
+        // Reset form
+        document.getElementById('resetForm').addEventListener('click', resetForm);
+        
+        function resetForm() {
+            document.getElementById('announcementTitle').value = '';
+            document.getElementById('announcementContent').value = '';
+            document.getElementById('announcementType').value = 'Kampanya';
+            document.getElementById('fileInput').value = '';
+            selectedFiles = [];
+            displaySelectedFiles();
+        }
+        
+        // Display announcements
+        function displayAnnouncements() {
+            const grid = document.getElementById('announcementsGrid');
+            
+            if (announcements.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: white; border-radius: 15px;">
+                        <h2 style="font-size: 2em; margin-bottom: 15px;">📭</h2>
+                        <h3>Henüz Duyuru Yok</h3>
+                        <p style="color: #666; margin-top: 10px;">Yeni duyuru eklemek için yukarıdaki butona tıklayın.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Duyuruları tarihe göre sırala (yeniden eskiye)
+            const sortedAnnouncements = [...announcements].sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+            });
+            
+            grid.innerHTML = sortedAnnouncements.map(announcement => {
+                const date = new Date(announcement.date);
+                const formattedDate = date.toLocaleDateString('tr-TR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const hasImage = announcement.attachments.some(a => ['jpg', 'jpeg', 'png', 'gif'].includes(a.type));
+                
+                return `
+                    <div class="announcement-card" onclick="openModal(${announcement.id})">
+                        <div class="announcement-badge">${announcement.type}</div>
+                        <div class="announcement-image">
+                            ${announcement.icon}
+                        </div>
+                        <div class="announcement-content">
+                            <div class="announcement-title">${announcement.title}</div>
+                            <div class="announcement-date">📅 ${formattedDate}</div>
+                            <div class="announcement-preview">
+                                ${announcement.content.substring(0, 120)}${announcement.content.length > 120 ? '...' : ''}
+                            </div>
+                            ${announcement.attachments.length > 0 ? `
+                                <div class="announcement-attachments">
+                                    ${announcement.attachments.slice(0, 3).map(a => `
+                                        <span class="attachment-badge">${a.icon} ${a.type.toUpperCase()}</span>
+                                    `).join('')}
+                                    ${announcement.attachments.length > 3 ? `
+                                        <span class="attachment-badge">+${announcement.attachments.length - 3} daha</span>
+                                    ` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="announcement-footer">
+                            <button class="view-btn" onclick="event.stopPropagation(); openModal(${announcement.id})">
+                                Detayları Gör →
+                            </button>
+                            <button class="delete-announcement-btn" onclick="event.stopPropagation(); deleteAnnouncement(${announcement.id})">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Open modal
+        function openModal(id) {
+            const announcement = announcements.find(a => a.id === id);
+            if (!announcement) return;
+            
+            const date = new Date(announcement.date);
+            const formattedDate = date.toLocaleDateString('tr-TR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            document.getElementById('modalTitle').textContent = announcement.icon + ' ' + announcement.title;
+            document.getElementById('modalDate').textContent = '📅 ' + formattedDate + ' • ' + announcement.type;
+            document.getElementById('modalContent').textContent = announcement.content;
+            
+            // Handle image if exists
+            const imageAttachment = announcement.attachments.find(a => ['jpg', 'jpeg', 'png', 'gif'].includes(a.type));
+            const modalImage = document.getElementById('modalImage');
+            if (imageAttachment) {
+                modalImage.style.display = 'block';
+                modalImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+                modalImage.alt = imageAttachment.name;
+            } else {
+                modalImage.style.display = 'none';
+            }
+            
+            // Handle attachments
+            const attachmentsDiv = document.getElementById('modalAttachments');
+            const attachmentList = document.getElementById('attachmentList');
+            
+            if (announcement.attachments.length > 0) {
+                attachmentsDiv.style.display = 'block';
+                attachmentList.innerHTML = announcement.attachments.map(attachment => `
+                    <div class="attachment-item">
+                        <div class="attachment-info">
+                            <span class="attachment-icon">${attachment.icon}</span>
+                            <div class="attachment-details">
+                                <div class="attachment-name">${attachment.name}</div>
+                                <div class="attachment-size">${attachment.size}</div>
+                            </div>
+                        </div>
+                        <button class="download-btn" onclick="downloadFile('${attachment.name}')">
+                            ⬇️ İndir
+                        </button>
+                    </div>
+                `).join('');
+            } else {
+                attachmentsDiv.style.display = 'none';
+            }
+            
+            document.getElementById('announcementModal').style.display = 'block';
+        }
+        
+        // Close modal
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('announcementModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('announcementModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Delete announcement
+        function deleteAnnouncement(id) {
+            if (!confirm('Bu duyuruyu silmek istediğinizden emin misiniz?')) return;
+            
+            announcements = announcements.filter(a => a.id !== id);
+            localStorage.setItem('announcements', JSON.stringify(announcements));
+            displayAnnouncements();
+            
+            alert('✅ Duyuru silindi!');
+        }
+        
+        // Download file (simulated)
+        function downloadFile(filename) {
+            alert(`📥 "${filename}" dosyası indiriliyor...\n\n(Bu demo bir simülasyondur. Gerçek uygulamada dosya indirilecektir.)`);
+        }
+        
+        // Initial display
+        displayAnnouncements();
+    </script>
+    
+    <!-- Shared Header and Footer -->
+    <script src="shared-components.js"></script>
+</body>
+</html>

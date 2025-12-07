@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ders Notları - NoteMaster</title>
+    <link href="templatemo-3d-coverflow.css" rel="stylesheet">
+    <style>
+        .note-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 20px 40px;
+        }
+        
+        .note-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 20px;
+        }
+        
+        .note-header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .note-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        .study-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .subjects-sidebar {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .subjects-sidebar h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .subject-input {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .subject-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px 0 0 8px;
+            font-size: 14px;
+        }
+        
+        .subject-input button {
+            padding: 8px 15px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+        
+        .subjects-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .subject-item {
+            background: white;
+            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .subject-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .subject-item.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .delete-subject {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .subject-item.active .delete-subject {
+            color: white;
+        }
+        
+        .notes-main {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .notes-main h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .note-editor {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .note-input {
+            width: 100%;
+            min-height: 300px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            resize: vertical;
+            color: #000;
+        }
+        
+        .note-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .saved-notes {
+            margin-top: 30px;
+        }
+        
+        .saved-note {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .note-content {
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .note-item-actions {
+            margin-top: 10px;
+            text-align: right;
+        }
+        
+        .btn-small {
+            padding: 5px 12px;
+            font-size: 0.8em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
+        .btn-edit {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .study-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .note-container {
+                padding: 20px;
+            }
+            
+            .note-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">← Ana Sayfaya Dön</button>
+    
+    <div class="note-page">
+        <div class="note-container">
+            <div class="note-header">
+                <h1>📚 Ders Notları</h1>
+                <p>Öğrenme materyalleri ve ders kayıtları</p>
+            </div>
+            
+            <div class="study-layout">
+                <div class="subjects-sidebar">
+                    <h3>Dersler</h3>
+                    <div class="subject-input">
+                        <input type="text" id="subjectInput" placeholder="Ders adı">
+                        <button onclick="addSubject()">+</button>
+                    </div>
+                    <ul class="subjects-list" id="subjectsList">
+                        <li class="subject-item active" data-subject="genel">Genel Notlar <button class="delete-subject" onclick="deleteSubject('genel')">×</button></li>
+                    </ul>
+                </div>
+                
+                <div class="notes-main">
+                    <h3 id="currentSubjectTitle">Genel Notlar</h3>
+                    
+                    <div class="note-editor">
+                        <textarea class="note-input" id="noteInput" placeholder="Ders notlarınızı buraya yazın..."></textarea>
+                        <div class="note-actions">
+                            <button class="btn btn-primary" onclick="saveNote()">Notu Kaydet</button>
+                            <button class="btn btn-secondary" onclick="clearNote()">Temizle</button>
+                        </div>
+                    </div>
+                    
+                    <div class="saved-notes">
+                        <h4>Kaydedilen Notlar</h4>
+                        <div id="notesList">
+                            <div class="empty-state">Bu ders için henüz not kaydedilmemiş.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let subjects = JSON.parse(localStorage.getItem('study-subjects')) || ['genel'];
+        let notes = JSON.parse(localStorage.getItem('study-notes')) || {};
+        let currentSubject = 'genel';
+        let editingNoteId = null;
+        
+        function goBack() {
+            window.history.back();
+        }
+        
+        function addSubject() {
+            const input = document.getElementById('subjectInput');
+            const subjectName = input.value.trim();
+            
+            if (subjectName && !subjects.includes(subjectName)) {
+                subjects.push(subjectName);
+                saveSubjects();
+                displaySubjects();
+                input.value = '';
+            }
+        }
+        
+        function deleteSubject(subject) {
+            if (subject === 'genel') {
+                alert('Genel Notlar dersi silinemez.');
+                return;
+            }
+            
+            if (confirm(`${subject} dersini ve tüm notlarını silmek istediğinizden emin misiniz?`)) {
+                subjects = subjects.filter(s => s !== subject);
+                delete notes[subject];
+                saveSubjects();
+                saveNotes();
+                displaySubjects();
+                
+                if (currentSubject === subject) {
+                    selectSubject('genel');
+                }
+            }
+        }
+        
+        function selectSubject(subject) {
+            currentSubject = subject;
+            document.getElementById('currentSubjectTitle').textContent = subject === 'genel' ? 'Genel Notlar' : subject;
+            
+            // Update active subject
+            document.querySelectorAll('.subject-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.subject === subject);
+            });
+            
+            // Clear editor
+            document.getElementById('noteInput').value = '';
+            editingNoteId = null;
+            
+            displayNotes();
+        }
+        
+        function saveNote() {
+            const content = document.getElementById('noteInput').value.trim();
+            if (!content) {
+                alert('Lütfen bir not yazın.');
+                return;
+            }
+            
+            if (!notes[currentSubject]) {
+                notes[currentSubject] = [];
+            }
+            
+            const note = {
+                id: editingNoteId || Date.now(),
+                content: content,
+                date: new Date().toISOString(),
+                subject: currentSubject
+            };
+            
+            if (editingNoteId) {
+                const index = notes[currentSubject].findIndex(n => n.id === editingNoteId);
+                notes[currentSubject][index] = note;
+                editingNoteId = null;
+            } else {
+                notes[currentSubject].push(note);
+            }
+            
+            saveNotes();
+            displayNotes();
+            document.getElementById('noteInput').value = '';
+        }
+        
+        function clearNote() {
+            if (confirm('Notu temizlemek istediğinizden emin misiniz?')) {
+                document.getElementById('noteInput').value = '';
+                editingNoteId = null;
+            }
+        }
+        
+        function editNote(noteId) {
+            const note = notes[currentSubject].find(n => n.id === noteId);
+            if (note) {
+                document.getElementById('noteInput').value = note.content;
+                editingNoteId = noteId;
+                document.getElementById('noteInput').focus();
+            }
+        }
+        
+        function deleteNote(noteId) {
+            if (confirm('Bu notu silmek istediğinizden emin misiniz?')) {
+                notes[currentSubject] = notes[currentSubject].filter(n => n.id !== noteId);
+                saveNotes();
+                displayNotes();
+            }
+        }
+        
+        function saveSubjects() {
+            localStorage.setItem('study-subjects', JSON.stringify(subjects));
+        }
+        
+        function saveNotes() {
+            localStorage.setItem('study-notes', JSON.stringify(notes));
+        }
+        
+        function displaySubjects() {
+            const container = document.getElementById('subjectsList');
+            container.innerHTML = subjects.map(subject => `
+                <li class="subject-item ${subject === currentSubject ? 'active' : ''}" data-subject="${subject}" onclick="selectSubject('${subject}')">
+                    ${subject === 'genel' ? 'Genel Notlar' : subject}
+                    <button class="delete-subject" onclick="event.stopPropagation(); deleteSubject('${subject}')">×</button>
+                </li>
+            `).join('');
+        }
+        
+        function displayNotes() {
+            const container = document.getElementById('notesList');
+            const subjectNotes = notes[currentSubject] || [];
+            
+            if (subjectNotes.length === 0) {
+                container.innerHTML = '<div class="empty-state">Bu ders için henüz not kaydedilmemiş.</div>';
+                return;
+            }
+            
+            // Sort notes by date (newest first)
+            const sortedNotes = [...subjectNotes].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = sortedNotes.map(note => `
+                <div class="saved-note">
+                    <div class="note-meta">
+                        <span>📝 ${new Date(note.date).toLocaleDateString('tr-TR')}</span>
+                        <span>${new Date(note.date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
+                    </div>
+                    <div class="note-content">${note.content.replace(/\n/g, '<br>')}</div>
+                    <div class="note-item-actions">
+                        <button class="btn-small btn-edit" onclick="editNote(${note.id})">Düzenle</button>
+                        <button class="btn-small btn-delete" onclick="deleteNote(${note.id})">Sil</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Enter key to add subject
+        document.getElementById('subjectInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addSubject();
+            }
+        });
+        
+        // Initialize
+        displaySubjects();
+        displayNotes();
+    </script>
+    
+    <!-- Shared Header and Footer -->
+    <script src="shared-components.js"></script>
+</body>
+</html>
