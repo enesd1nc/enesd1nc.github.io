@@ -1,6 +1,6 @@
 # 📝 NoteMaster - Akıllı Not Defteri
 
-![NoteMaster Banner](https://via.placeholder.com/1200x300/667eea/ffffff?text=NoteMaster+Akıllı+Not+Defteri)
+![NoteMaster Banner](banner.png)
 
 > **Düşüncelerinizi organize edin, fikirlerinizi geliştirin ve hayatınızı kolaylaştırın.**
 
